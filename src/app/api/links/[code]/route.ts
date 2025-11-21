@@ -33,10 +33,13 @@ export async function DELETE(
         });
 
         return new NextResponse(null, { status: 204 });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error deleting link:', error);
         // Check if error is "Record to delete does not exist"
         // Prisma throws P2025 for this
+        if (error.code === 'P2025') {
+            return new NextResponse(null, { status: 404 });
+        }
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 }

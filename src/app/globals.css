@@ -1,37 +1,53 @@
 @import "tailwindcss";
 
 @theme {
-    --color-background: hsl(240 10% 3.9%);
-    --color-foreground: hsl(0 0% 98%);
+    --color-background: hsl(0 0% 0%);
+    --color-foreground: hsl(0 0% 100%);
+
+    --color-card: hsl(0 0% 3%);
+    --color-card-foreground: hsl(0 0% 100%);
+
+    --color-popover: hsl(0 0% 3%);
+    --color-popover-foreground: hsl(0 0% 100%);
+
+    --color-primary: hsl(0 0% 98%);
+    --color-primary-foreground: hsl(0 0% 9%);
+
+    --color-secondary: hsl(0 0% 14.9%);
+    --color-secondary-foreground: hsl(0 0% 98%);
+
+    --color-muted: hsl(0 0% 14.9%);
+    --color-muted-foreground: hsl(0 0% 63.9%);
+
+    --color-accent: hsl(0 0% 14.9%);
+    --color-accent-foreground: hsl(0 0% 98%);
+
+    --color-destructive: hsl(0 62.8% 30.6%);
+    --color-destructive-foreground: hsl(0 0% 98%);
+
+    --color-border: hsl(0 0% 14.9%);
+    --color-input: hsl(0 0% 14.9%);
+    --color-ring: hsl(0 0% 83.1%);
+
+    --radius: 0.5rem;
 }
 
 @layer base {
     body {
-        background-color: var(--color-zinc-950);
-        color: var(--color-zinc-50);
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        background-image:
-            radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
-            radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.15) 0px, transparent 50%);
-        background-attachment: fixed;
+        background-color: var(--color-background);
+        color: var(--color-foreground);
+        font-feature-settings: "rlig" 1, "calt" 1;
     }
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-    width: 8px;
-}
+@layer utilities {
+    .step {
+        counter-increment: step;
+    }
 
-::-webkit-scrollbar-track {
-    background-color: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-    background-color: var(--color-zinc-800);
-    border-radius: 9999px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background-color: var(--color-zinc-700);
+    .step:before {
+        @apply absolute w-9 h-9 bg-muted rounded-full font-mono font-medium text-center text-base inline-flex items-center justify-center -indent-px border-4 border-background;
+        @apply ml-[-50px] mt-[-4px];
+        content: counter(step);
+    }
 }

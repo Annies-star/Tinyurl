@@ -1,9 +1,7 @@
-import { Link } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 import { CreateLinkForm } from '@/components/CreateLinkForm';
 import { LinkTable } from '@/components/LinkTable';
 
-// Force dynamic to ensure we get fresh data on every request
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
@@ -11,35 +9,34 @@ export default async function Home() {
     orderBy: { createdAt: 'desc' },
   });
 
-  // Serializable dates
-  const serializedLinks = links.map((link: Link) => ({
+  const serializedLinks = links.map((link) => ({
     ...link,
-    lastClicked: link.lastClicked ? link.lastClicked.toISOString() : null,
     createdAt: link.createdAt.toISOString(),
+    lastClicked: link.lastClicked ? link.lastClicked.toISOString() : null,
   }));
 
   return (
-    <div className="container mx-auto flex flex-col gap-12 px-4 py-12">
+    <main className="flex min-h-screen flex-col items-center gap-12 p-8 pt-24">
       <div className="flex flex-col items-center gap-6 text-center">
-        <h1 className="bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-5xl font-bold tracking-tight text-transparent md:text-6xl">
+        <h1 className="text-5xl font-bold tracking-tight md:text-6xl">
           Shorten Your Links
         </h1>
-        <p className="max-w-2xl text-lg text-zinc-400">
+        <p className="max-w-2xl text-lg text-muted-foreground">
           TinyLink is a premium URL shortener that gives you full control over your links.
           Track clicks, manage redirects, and share with confidence.
         </p>
         <CreateLinkForm />
       </div>
 
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-white">Your Links</h2>
-          <div className="rounded-full bg-white/5 px-4 py-1 text-sm font-medium text-zinc-400">
-            {links.length} Total
+      <div className="w-full max-w-5xl space-y-4">
+        <div className="flex items-center justify-between px-1">
+          <h2 className="text-xl font-semibold">Your Links</h2>
+          <div className="text-sm text-muted-foreground">
+            {links.length} {links.length === 1 ? 'link' : 'links'} total
           </div>
         </div>
         <LinkTable links={serializedLinks} />
       </div>
-    </div>
+    </main>
   );
 }
