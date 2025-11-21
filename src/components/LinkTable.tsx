@@ -85,7 +85,7 @@ export function LinkTable({ links }: { links: LinkItem[] }) {
 
     return (
         <>
-            <div className="rounded-md border">
+            <div className="glass-card overflow-hidden rounded-lg">
                 <Table>
                     <TableHeader>
                         <TableRow>
@@ -102,7 +102,7 @@ export function LinkTable({ links }: { links: LinkItem[] }) {
                             <TableRow key={link.id}>
                                 <TableCell className="font-medium">
                                     <div className="flex items-center gap-2">
-                                        <span className="text-primary">/{link.code}</span>
+                                        <span className="font-semibold">/{link.code}</span>
                                         <Button
                                             variant="ghost"
                                             size="icon"

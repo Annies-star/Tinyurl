@@ -28,18 +28,23 @@ export async function DELETE(
 ) {
     const { code } = await params;
     try {
+        // Check if link exists
+        const link = await prisma.link.findUnique({
+            where: { code },
+        });
+
+        if (!link) {
+            return NextResponse.json({ error: 'Link not found' }, { status: 404 });
+        }
+
+        // Delete the link
         await prisma.link.delete({
             where: { code },
         });
 
-        return new NextResponse(null, { status: 204 });
-    } catch (error: any) {
+        return NextResponse.json({ success: true, message: 'Link deleted' }, { status: 200 });
+    } catch (error) {
         console.error('Error deleting link:', error);
-        // Check if error is "Record to delete does not exist"
-        // Prisma throws P2025 for this
-        if (error.code === 'P2025') {
-            return new NextResponse(null, { status: 404 });
-        }
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 }

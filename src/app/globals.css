@@ -1,53 +1,96 @@
 @import "tailwindcss";
 
 @theme {
-    --color-background: hsl(0 0% 0%);
-    --color-foreground: hsl(0 0% 100%);
+    /* Dark theme (default) */
+    --color-background: hsl(0 0% 4%);
+    /* near-black */
+    --color-foreground: hsl(0 0% 96%);
+    /* light grey text */
 
-    --color-card: hsl(0 0% 3%);
-    --color-card-foreground: hsl(0 0% 100%);
+    --color-card: hsl(0 0% 7%);
+    --color-card-foreground: hsl(0 0% 96%);
 
-    --color-popover: hsl(0 0% 3%);
-    --color-popover-foreground: hsl(0 0% 100%);
+    --color-popover: hsl(0 0% 7%);
+    --color-popover-foreground: hsl(0 0% 96%);
 
-    --color-primary: hsl(0 0% 98%);
-    --color-primary-foreground: hsl(0 0% 9%);
+    --color-primary: hsl(0 0% 96%);
+    /* light grey highlight */
+    --color-primary-foreground: hsl(0 0% 4%);
 
-    --color-secondary: hsl(0 0% 14.9%);
-    --color-secondary-foreground: hsl(0 0% 98%);
+    --color-secondary: hsl(0 0% 12%);
+    --color-secondary-foreground: hsl(0 0% 96%);
 
-    --color-muted: hsl(0 0% 14.9%);
-    --color-muted-foreground: hsl(0 0% 63.9%);
+    --color-muted: hsl(0 0% 12%);
+    --color-muted-foreground: hsl(0 0% 60%);
 
-    --color-accent: hsl(0 0% 14.9%);
-    --color-accent-foreground: hsl(0 0% 98%);
+    --color-accent: hsl(0 0% 96%);
+    --color-accent-foreground: hsl(0 0% 4%);
 
-    --color-destructive: hsl(0 62.8% 30.6%);
-    --color-destructive-foreground: hsl(0 0% 98%);
+    --color-destructive: hsl(0 65% 45%);
+    --color-destructive-foreground: hsl(0 0% 96%);
 
-    --color-border: hsl(0 0% 14.9%);
-    --color-input: hsl(0 0% 14.9%);
-    --color-ring: hsl(0 0% 83.1%);
+    --color-border: hsl(0 0% 16%);
+    --color-input: hsl(0 0% 16%);
+    --color-ring: hsl(0 0% 96%);
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 }
 
 @layer base {
     body {
         background-color: var(--color-background);
+        background-image: none;
+        /* removed gradients for clean black look */
         color: var(--color-foreground);
         font-feature-settings: "rlig" 1, "calt" 1;
+    }
+
+    /* Light theme */
+    .light {
+        --color-background: hsl(0 0% 94%);
+        /* light gray */
+        --color-foreground: hsl(0 0% 10%);
+        /* dark text */
+
+        --color-card: hsl(0 0% 100%);
+        --color-card-foreground: hsl(0 0% 10%);
+
+        --color-popover: hsl(0 0% 100%);
+        --color-popover-foreground: hsl(0 0% 10%);
+
+        --color-primary: hsl(0 0% 10%);
+        --color-primary-foreground: hsl(0 0% 94%);
+
+        --color-secondary: hsl(0 0% 88%);
+        --color-secondary-foreground: hsl(0 0% 10%);
+
+        --color-muted: hsl(0 0% 88%);
+        --color-muted-foreground: hsl(0 0% 45%);
+
+        --color-accent: hsl(0 0% 10%);
+        --color-accent-foreground: hsl(0 0% 94%);
+
+        --color-destructive: hsl(0 65% 50%);
+        --color-destructive-foreground: hsl(0 0% 96%);
+
+        --color-border: hsl(0 0% 80%);
+        --color-input: hsl(0 0% 80%);
+        --color-ring: hsl(0 0% 10%);
+    }
+
+    .light body {
+        background-image: none;
+        /* clean light background */
     }
 }
 
 @layer utilities {
-    .step {
-        counter-increment: step;
+    .glow-border {
+        box-shadow: 0 0 12px hsla(0, 0%, 96%, 0.25);
+        /* soft grey glow */
     }
 
-    .step:before {
-        @apply absolute w-9 h-9 bg-muted rounded-full font-mono font-medium text-center text-base inline-flex items-center justify-center -indent-px border-4 border-background;
-        @apply ml-[-50px] mt-[-4px];
-        content: counter(step);
+    .glow-text {
+        text-shadow: 0 0 12px hsla(0, 0%, 96%, 0.3);
     }
 }

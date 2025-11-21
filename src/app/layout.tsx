@@ -3,13 +3,12 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
-import { cn } from '@/lib/utils';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'TinyLink - Premium URL Shortener',
-  description: 'Shorten your URLs with style and track your clicks.',
+  title: 'TinyLink - URL Shortener',
+  description: 'Premium URL shortener with analytics',
 };
 
 export default function RootLayout({
@@ -19,9 +18,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={cn(inter.className, 'flex min-h-screen flex-col')}>
+      <body className={inter.className}>
         <Header />
-        <main className="flex-1">{children}</main>
+        <main className="min-h-screen">
+          {children}
+        </main>
         <Footer />
       </body>
     </html>

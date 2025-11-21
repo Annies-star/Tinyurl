@@ -49,12 +49,12 @@ export default function StatsPageClient({ link }: { link: any }) {
                 >
                     <ArrowLeft className="h-4 w-4" /> Back to Dashboard
                 </Link>
-                <h1 className="text-3xl font-bold tracking-tight">Link Statistics</h1>
+                <h1 className="bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-3xl font-bold tracking-tight text-transparent">Link Statistics</h1>
                 <p className="text-muted-foreground">Detailed analytics for your short link.</p>
             </div>
 
             <div className="grid gap-6 md:grid-cols-2">
-                <Card>
+                <Card className="border-purple-500/20 bg-gradient-to-br from-purple-950/20 to-blue-950/20">
                     <CardHeader>
                         <CardTitle>Link Details</CardTitle>
                         <CardDescription>Information about your link</CardDescription>
@@ -88,7 +88,7 @@ export default function StatsPageClient({ link }: { link: any }) {
                     </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="border-purple-500/20 bg-gradient-to-br from-purple-950/20 to-blue-950/20">
                     <CardHeader>
                         <CardTitle>Performance</CardTitle>
                         <CardDescription>Click tracking metrics</CardDescription>
@@ -112,7 +112,7 @@ export default function StatsPageClient({ link }: { link: any }) {
                 </Card>
             </div>
 
-            <Card>
+            <Card className="border-purple-500/20 bg-gradient-to-br from-purple-950/20 to-blue-950/20">
                 <CardHeader>
                     <CardTitle>Click Activity</CardTitle>
                     <CardDescription>Weekly click distribution (Simulated)</CardDescription>
@@ -120,6 +120,12 @@ export default function StatsPageClient({ link }: { link: any }) {
                 <CardContent className="h-[300px]">
                     <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={chartData}>
+                            <defs>
+                                <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stopColor="hsl(263 70% 60%)" stopOpacity={1} />
+                                    <stop offset="100%" stopColor="hsl(200 70% 60%)" stopOpacity={0.8} />
+                                </linearGradient>
+                            </defs>
                             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--muted))" vertical={false} />
                             <XAxis
                                 dataKey="name"
@@ -146,7 +152,7 @@ export default function StatsPageClient({ link }: { link: any }) {
                             />
                             <Bar
                                 dataKey="clicks"
-                                fill="hsl(var(--foreground))"
+                                fill="url(#colorGradient)"
                                 radius={[4, 4, 0, 0]}
                             />
                         </BarChart>

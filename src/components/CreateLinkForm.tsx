@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowRight, Link as LinkIcon, Loader2 } from 'lucide-react';
+import { ArrowRight, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
@@ -47,7 +47,7 @@ export function CreateLinkForm() {
     };
 
     return (
-        <Card className="w-full max-w-2xl border-zinc-800 bg-zinc-950/50 backdrop-blur-sm">
+        <Card className="glass-card w-full max-w-2xl">
             <CardContent className="p-6">
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4 md:flex-row">
                     <div className="flex-1">
@@ -57,7 +57,7 @@ export function CreateLinkForm() {
                             value={url}
                             onChange={(e) => setUrl(e.target.value)}
                             required
-                            className="h-12 bg-zinc-900/50"
+                            className="glass-strong h-12"
                         />
                     </div>
                     <div className="w-full md:w-48">
@@ -68,7 +68,7 @@ export function CreateLinkForm() {
                             onChange={(e) => setCustomCode(e.target.value)}
                             pattern="[a-zA-Z0-9-_]+"
                             title="Only letters, numbers, hyphens, and underscores allowed"
-                            className="h-12 bg-zinc-900/50"
+                            className="glass-strong h-12"
                         />
                     </div>
                     <Button
@@ -87,13 +87,13 @@ export function CreateLinkForm() {
                 </form>
 
                 {error && (
-                    <div className="mt-4 rounded-md bg-red-500/10 p-3 text-sm text-red-500">
+                    <div className="mt-4 rounded-md bg-red-100 p-3 text-sm text-red-700">
                         {error}
                     </div>
                 )}
 
                 {success && (
-                    <div className="mt-4 rounded-md bg-green-500/10 p-3 text-sm text-green-500">
+                    <div className="mt-4 rounded-md bg-green-100 p-3 text-sm text-green-700">
                         Link created successfully!
                     </div>
                 )}
