@@ -222,14 +222,14 @@ export function LinkTable({ links }: { links: LinkItem[] }) {
                                 <Grid size={{ xs: 12, md: 6 }}>
                                     <Box>
                                         <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 0.5, fontWeight: 600 }}>
-                                            Short URL
+                                            Short Code
                                         </Typography>
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                                             <Typography
                                                 variant="body2"
                                                 sx={{ color: 'primary.main', fontWeight: 500, flex: 1 }}
                                             >
-                                                {window.location.origin}/{link.code}
+                                                /{link.code}
                                             </Typography>
                                             <IconButton
                                                 size="small"

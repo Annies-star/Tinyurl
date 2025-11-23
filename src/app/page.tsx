@@ -37,7 +37,7 @@ export default async function Home() {
 
       {/* Stats Cards */}
       <Grid container spacing={3}>
-        <Grid size={{ xs: 12, md: 4 }}>
+        <Grid size={{ xs: 4, md: 4 }}>
           <Card sx={{ height: '100%', bgcolor: 'background.paper' }}>
             <CardContent>
               <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
@@ -49,7 +49,7 @@ export default async function Home() {
             </CardContent>
           </Card>
         </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
+        <Grid size={{ xs: 4, md: 4 }}>
           <Card sx={{ height: '100%', bgcolor: 'background.paper' }}>
             <CardContent>
               <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
@@ -61,7 +61,7 @@ export default async function Home() {
             </CardContent>
           </Card>
         </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
+        <Grid size={{ xs: 4, md: 4 }}>
           <Card sx={{ height: '100%', bgcolor: 'background.paper' }}>
             <CardContent>
               <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
