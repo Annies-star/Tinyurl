@@ -5,32 +5,29 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ExternalLink, BarChart2, Trash2, Copy, Check, QrCode, MoreHorizontal } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
-import { cn, formatDate, formatDateTime } from '@/lib/utils';
+import { formatDate } from '@/lib/utils';
 import {
     Table,
     TableBody,
     TableCell,
+    TableContainer,
     TableHead,
-    TableHeader,
     TableRow,
-} from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import {
+    Paper,
+    IconButton,
+    Menu,
+    MenuItem,
+    ListItemIcon,
+    ListItemText,
     Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
     DialogTitle,
-    DialogTrigger,
-} from '@/components/ui/dialog';
+    DialogContent,
+    DialogContentText,
+    Box,
+    Typography,
+    Button,
+    Chip
+} from '@mui/material';
 
 interface LinkItem {
     id: string;
@@ -47,11 +44,27 @@ export function LinkTable({ links }: { links: LinkItem[] }) {
     const [deleting, setDeleting] = useState<string | null>(null);
     const [qrCodeLink, setQrCodeLink] = useState<string | null>(null);
 
+    // Menu state
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const [selectedLink, setSelectedLink] = useState<LinkItem | null>(null);
+    const open = Boolean(anchorEl);
+
+    const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, link: LinkItem) => {
+        setAnchorEl(event.currentTarget);
+        setSelectedLink(link);
+    };
+
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+        setSelectedLink(null);
+    };
+
     const handleCopy = async (code: string) => {
         const url = `${window.location.origin}/${code}`;
         await navigator.clipboard.writeText(url);
         setCopying(code);
         setTimeout(() => setCopying(null), 2000);
+        handleMenuClose();
     };
 
     const handleDelete = async (code: string) => {
@@ -68,121 +81,148 @@ export function LinkTable({ links }: { links: LinkItem[] }) {
             console.error('Failed to delete link', error);
         } finally {
             setDeleting(null);
+            handleMenuClose();
         }
     };
 
     if (links.length === 0) {
         return (
-            <div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-12 text-center">
-                <div className="mb-4 rounded-full bg-muted p-4">
-                    <ExternalLink className="h-8 w-8 text-muted-foreground" />
-                </div>
-                <h3 className="text-xl font-semibold">No links yet</h3>
-                <p className="mt-2 text-muted-foreground">Create your first short link above to get started.</p>
-            </div>
+            <Box sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                p: 6,
+                border: '1px dashed',
+                borderColor: 'divider',
+                borderRadius: 2,
+                textAlign: 'center'
+            }}>
+                <Box sx={{ mb: 2, p: 2, borderRadius: '50%', bgcolor: 'action.hover' }}>
+                    <ExternalLink size={32} color="gray" />
+                </Box>
+                <Typography variant="h6" gutterBottom>No links yet</Typography>
+                <Typography variant="body2" color="text.secondary">Create your first short link above to get started.</Typography>
+            </Box>
         );
     }
 
     return (
         <>
-            <div className="glass-card overflow-hidden rounded-lg">
-                <Table>
-                    <TableHeader>
+            <TableContainer component={Paper} sx={{ backgroundImage: 'none', backgroundColor: 'background.paper' }}>
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <TableHead>
                         <TableRow>
-                            <TableHead className="w-[200px]">Short Link</TableHead>
-                            <TableHead className="max-w-[300px]">Original URL</TableHead>
-                            <TableHead className="text-center">Clicks</TableHead>
-                            <TableHead>Last Clicked</TableHead>
-                            <TableHead>Created</TableHead>
-                            <TableHead className="text-right">Actions</TableHead>
+                            <TableCell>Short Link</TableCell>
+                            <TableCell>Original URL</TableCell>
+                            <TableCell align="center">Clicks</TableCell>
+                            <TableCell>Last Clicked</TableCell>
+                            <TableCell>Created</TableCell>
+                            <TableCell align="right">Actions</TableCell>
                         </TableRow>
-                    </TableHeader>
+                    </TableHead>
                     <TableBody>
                         {links.map((link) => (
-                            <TableRow key={link.id}>
-                                <TableCell className="font-medium">
-                                    <div className="flex items-center gap-2">
-                                        <span className="font-semibold">/{link.code}</span>
-                                        <Button
-                                            variant="ghost"
-                                            size="icon"
-                                            className="h-6 w-6"
+                            <TableRow
+                                key={link.id}
+                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                            >
+                                <TableCell component="th" scope="row">
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                        <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                                            /{link.code}
+                                        </Typography>
+                                        <IconButton
+                                            size="small"
                                             onClick={() => handleCopy(link.code)}
                                         >
                                             {copying === link.code ? (
-                                                <Check className="h-3 w-3 text-green-500" />
+                                                <Check size={14} color="#22c55e" />
                                             ) : (
-                                                <Copy className="h-3 w-3" />
+                                                <Copy size={14} />
                                             )}
-                                        </Button>
-                                    </div>
+                                        </IconButton>
+                                    </Box>
                                 </TableCell>
-                                <TableCell className="max-w-[300px] truncate text-muted-foreground" title={link.originalUrl}>
-                                    {link.originalUrl}
+                                <TableCell sx={{ maxWidth: 300 }}>
+                                    <Typography variant="body2" noWrap color="text.secondary" title={link.originalUrl}>
+                                        {link.originalUrl}
+                                    </Typography>
                                 </TableCell>
-                                <TableCell className="text-center">
-                                    <div className="inline-flex items-center justify-center rounded-full bg-secondary px-2.5 py-0.5 text-xs font-medium">
-                                        {link.clicks}
-                                    </div>
+                                <TableCell align="center">
+                                    <Chip label={link.clicks} size="small" />
                                 </TableCell>
-                                <TableCell className="text-muted-foreground">
-                                    {formatDate(link.lastClicked)}
+                                <TableCell>
+                                    <Typography variant="body2" color="text.secondary">
+                                        {formatDate(link.lastClicked)}
+                                    </Typography>
                                 </TableCell>
-                                <TableCell className="text-muted-foreground">
-                                    {formatDate(link.createdAt)}
+                                <TableCell>
+                                    <Typography variant="body2" color="text.secondary">
+                                        {formatDate(link.createdAt)}
+                                    </Typography>
                                 </TableCell>
-                                <TableCell className="text-right">
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger asChild>
-                                            <Button variant="ghost" size="icon" className="h-8 w-8">
-                                                <MoreHorizontal className="h-4 w-4" />
-                                                <span className="sr-only">Open menu</span>
-                                            </Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="end">
-                                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                            <DropdownMenuItem onClick={() => handleCopy(link.code)}>
-                                                <Copy className="mr-2 h-4 w-4" /> Copy Link
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem asChild>
-                                                <Link href={`/code/${link.code}`}>
-                                                    <BarChart2 className="mr-2 h-4 w-4" /> View Stats
-                                                </Link>
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem onClick={() => setQrCodeLink(`${window.location.origin}/${link.code}`)}>
-                                                <QrCode className="mr-2 h-4 w-4" /> Show QR Code
-                                            </DropdownMenuItem>
-                                            <DropdownMenuSeparator />
-                                            <DropdownMenuItem
-                                                onClick={() => handleDelete(link.code)}
-                                                className="text-destructive focus:text-destructive"
-                                            >
-                                                <Trash2 className="mr-2 h-4 w-4" /> Delete
-                                            </DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
+                                <TableCell align="right">
+                                    <IconButton
+                                        size="small"
+                                        onClick={(e) => handleMenuOpen(e, link)}
+                                    >
+                                        <MoreHorizontal size={16} />
+                                    </IconButton>
                                 </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
                 </Table>
-            </div>
+            </TableContainer>
 
-            <Dialog open={!!qrCodeLink} onOpenChange={(open) => !open && setQrCodeLink(null)}>
+            <Menu
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleMenuClose}
+                transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+            >
+                <MenuItem onClick={() => selectedLink && handleCopy(selectedLink.code)}>
+                    <ListItemIcon>
+                        <Copy size={16} />
+                    </ListItemIcon>
+                    <ListItemText>Copy Link</ListItemText>
+                </MenuItem>
+                <MenuItem component={Link} href={selectedLink ? `/code/${selectedLink.code}` : '#'}>
+                    <ListItemIcon>
+                        <BarChart2 size={16} />
+                    </ListItemIcon>
+                    <ListItemText>View Stats</ListItemText>
+                </MenuItem>
+                <MenuItem onClick={() => {
+                    if (selectedLink) setQrCodeLink(`${window.location.origin}/${selectedLink.code}`);
+                    handleMenuClose();
+                }}>
+                    <ListItemIcon>
+                        <QrCode size={16} />
+                    </ListItemIcon>
+                    <ListItemText>Show QR Code</ListItemText>
+                </MenuItem>
+                <MenuItem onClick={() => selectedLink && handleDelete(selectedLink.code)} sx={{ color: 'error.main' }}>
+                    <ListItemIcon>
+                        <Trash2 size={16} color="#ef4444" />
+                    </ListItemIcon>
+                    <ListItemText>Delete</ListItemText>
+                </MenuItem>
+            </Menu>
+
+            <Dialog open={!!qrCodeLink} onClose={() => setQrCodeLink(null)}>
+                <DialogTitle>QR Code</DialogTitle>
                 <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>QR Code</DialogTitle>
-                        <DialogDescription>
-                            Scan this code to visit the link.
-                        </DialogDescription>
-                    </DialogHeader>
-                    <div className="flex items-center justify-center p-6">
+                    <DialogContentText sx={{ mb: 2 }}>
+                        Scan this code to visit the link.
+                    </DialogContentText>
+                    <Box sx={{ display: 'flex', justifyContent: 'center', p: 2, bgcolor: 'white', borderRadius: 1 }}>
                         {qrCodeLink && (
-                            <div className="rounded-lg bg-white p-4">
-                                <QRCodeSVG value={qrCodeLink} size={200} />
-                            </div>
+                            <QRCodeSVG value={qrCodeLink} size={200} />
                         )}
-                    </div>
+                    </Box>
                 </DialogContent>
             </Dialog>
         </>

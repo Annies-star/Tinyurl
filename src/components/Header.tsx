@@ -1,25 +1,47 @@
+'use client';
+
 import Link from 'next/link';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 import { Link as LinkIcon } from 'lucide-react';
 
 export function Header() {
     return (
-        <header className="glass-strong sticky top-0 z-50 border-b">
-            <div className="container mx-auto flex h-16 items-center justify-between px-4">
-                <Link href="/" className="flex items-center gap-2 text-lg font-bold tracking-tight transition-opacity hover:opacity-80">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-gray-800 to-gray-600 shadow-lg">
-                        <LinkIcon className="h-5 w-5 text-white" />
-                    </div>
-                    <span className="text-foreground">TinyLink</span>
-                </Link>
-                <nav className="flex items-center gap-6">
-                    <Link href="/" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
-                        Dashboard
+        <AppBar position="sticky">
+            <Container maxWidth="lg">
+                <Toolbar disableGutters sx={{ justifyContent: 'space-between' }}>
+                    <Link href="/" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <Box sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            width: 32,
+                            height: 32,
+                            borderRadius: 1,
+                            background: 'linear-gradient(to bottom right, #374151, #4B5563)',
+                            boxShadow: 3
+                        }}>
+                            <LinkIcon size={20} color="white" />
+                        </Box>
+                        <Typography variant="h6" noWrap component="div" sx={{ fontWeight: 700, letterSpacing: '.05rem' }}>
+                            TinyLink
+                        </Typography>
                     </Link>
-                    <Link href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
-                        GitHub
-                    </Link>
-                </nav>
-            </div>
-        </header>
+
+                    <Box sx={{ display: 'flex', gap: 2 }}>
+                        <Button component={Link} href="/" color="inherit" sx={{ textTransform: 'none' }}>
+                            Dashboard
+                        </Button>
+                        <Button component={Link} href="https://github.com" target="_blank" rel="noopener noreferrer" color="inherit" sx={{ textTransform: 'none' }}>
+                            GitHub
+                        </Button>
+                    </Box>
+                </Toolbar>
+            </Container>
+        </AppBar>
     );
 }

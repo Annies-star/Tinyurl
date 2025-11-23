@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { prisma } from '@/lib/prisma';
+import { db, links } from '@/lib/db';
+import { eq } from 'drizzle-orm';
 import { ArrowLeft, Calendar, MousePointer2, Link as LinkIcon, ExternalLink } from 'lucide-react';
 import { formatDateTime } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -13,9 +14,7 @@ export default async function StatsPage({
     params: Promise<{ code: string }>;
 }) {
     const { code } = await params;
-    const link = await prisma.link.findUnique({
-        where: { code },
-    });
+    const [link] = await db.select().from(links).where(eq(links.code, code));
 
     if (!link) {
         notFound();

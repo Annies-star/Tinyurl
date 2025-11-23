@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import { db, links } from '@/lib/db';
+import { eq } from 'drizzle-orm';
 
 export async function GET(
     request: NextRequest,
@@ -7,9 +8,7 @@ export async function GET(
 ) {
     const { code } = await params;
     try {
-        const link = await prisma.link.findUnique({
-            where: { code },
-        });
+        const [link] = await db.select().from(links).where(eq(links.code, code));
 
         if (!link) {
             return NextResponse.json({ error: 'Link not found' }, { status: 404 });
@@ -29,18 +28,14 @@ export async function DELETE(
     const { code } = await params;
     try {
         // Check if link exists
-        const link = await prisma.link.findUnique({
-            where: { code },
-        });
+        const [link] = await db.select().from(links).where(eq(links.code, code));
 
         if (!link) {
             return NextResponse.json({ error: 'Link not found' }, { status: 404 });
         }
 
         // Delete the link
-        await prisma.link.delete({
-            where: { code },
-        });
+        await db.delete(links).where(eq(links.code, code));
 
         return NextResponse.json({ success: true, message: 'Link deleted' }, { status: 200 });
     } catch (error) {

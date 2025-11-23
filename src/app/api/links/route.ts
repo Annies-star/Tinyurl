@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import { db, links } from '@/lib/db';
 import { nanoid } from 'nanoid';
+import { desc, eq } from 'drizzle-orm';
 
 export async function GET() {
     try {
-        const links = await prisma.link.findMany({
-            orderBy: { createdAt: 'desc' },
-        });
-        return NextResponse.json(links);
+        const allLinks = await db.select().from(links).orderBy(desc(links.createdAt));
+        return NextResponse.json(allLinks);
     } catch (error) {
         console.error('Error fetching links:', error);
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
@@ -34,9 +33,7 @@ export async function POST(request: NextRequest) {
 
         if (shortCode) {
             // Check if custom code exists
-            const existing = await prisma.link.findUnique({
-                where: { code: shortCode },
-            });
+            const [existing] = await db.select().from(links).where(eq(links.code, shortCode));
             if (existing) {
                 return NextResponse.json({ error: 'Code already in use' }, { status: 409 });
             }
@@ -48,21 +45,17 @@ export async function POST(request: NextRequest) {
             // Let's do a quick check just in case.
             let attempts = 0;
             while (attempts < 5) {
-                const existing = await prisma.link.findUnique({
-                    where: { code: shortCode },
-                });
+                const [existing] = await db.select().from(links).where(eq(links.code, shortCode));
                 if (!existing) break;
                 shortCode = nanoid(6);
                 attempts++;
             }
         }
 
-        const link = await prisma.link.create({
-            data: {
-                originalUrl: url,
-                code: shortCode,
-            },
-        });
+        const [link] = await db.insert(links).values({
+            originalUrl: url,
+            code: shortCode,
+        }).returning();
 
         return NextResponse.json(link, { status: 201 });
     } catch (error) {

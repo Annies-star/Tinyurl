@@ -2,10 +2,17 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowRight, Loader2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent } from '@/components/ui/card';
+import { ArrowRight } from 'lucide-react';
+import {
+    Card,
+    CardContent,
+    TextField,
+    Button,
+    CircularProgress,
+    Alert,
+    Box,
+    Stack
+} from '@mui/material';
 
 export function CreateLinkForm() {
     const router = useRouter();
@@ -47,55 +54,67 @@ export function CreateLinkForm() {
     };
 
     return (
-        <Card className="glass-card w-full max-w-2xl">
-            <CardContent className="p-6">
-                <form onSubmit={handleSubmit} className="flex flex-col gap-4 md:flex-row">
-                    <div className="flex-1">
-                        <Input
+        <Card sx={{ width: '100%', maxWidth: 'sm', bgcolor: 'background.paper' }}>
+            <CardContent sx={{ p: 3 }}>
+                <form onSubmit={handleSubmit}>
+                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                        <TextField
+                            fullWidth
                             type="url"
                             placeholder="Enter your long URL here..."
                             value={url}
                             onChange={(e) => setUrl(e.target.value)}
                             required
-                            className="glass-strong h-12"
+                            variant="outlined"
+                            size="medium"
+                            InputProps={{
+                                sx: { bgcolor: 'background.default' }
+                            }}
                         />
-                    </div>
-                    <div className="w-full md:w-48">
-                        <Input
+                        <TextField
+                            fullWidth
+                            sx={{ maxWidth: { sm: 180 } }}
                             type="text"
-                            placeholder="Custom alias (opt)"
+                            placeholder="Alias (opt)"
                             value={customCode}
                             onChange={(e) => setCustomCode(e.target.value)}
-                            pattern="[a-zA-Z0-9-_]+"
-                            title="Only letters, numbers, hyphens, and underscores allowed"
-                            className="glass-strong h-12"
+                            inputProps={{
+                                pattern: "[a-zA-Z0-9-_]+",
+                                title: "Only letters, numbers, hyphens, and underscores allowed"
+                            }}
+                            variant="outlined"
+                            size="medium"
+                            InputProps={{
+                                sx: { bgcolor: 'background.default' }
+                            }}
                         />
-                    </div>
-                    <Button
-                        type="submit"
-                        disabled={loading}
-                        className="h-12 px-8 font-semibold"
-                    >
-                        {loading ? (
-                            <Loader2 className="h-5 w-5 animate-spin" />
-                        ) : (
-                            <>
-                                Shorten <ArrowRight className="ml-2 h-5 w-5" />
-                            </>
-                        )}
-                    </Button>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            disabled={loading}
+                            sx={{ minWidth: 120, height: 56 }}
+                        >
+                            {loading ? (
+                                <CircularProgress size={24} color="inherit" />
+                            ) : (
+                                <>
+                                    Shorten <ArrowRight size={20} style={{ marginLeft: 8 }} />
+                                </>
+                            )}
+                        </Button>
+                    </Stack>
                 </form>
 
                 {error && (
-                    <div className="mt-4 rounded-md bg-red-100 p-3 text-sm text-red-700">
+                    <Alert severity="error" sx={{ mt: 2 }}>
                         {error}
-                    </div>
+                    </Alert>
                 )}
 
                 {success && (
-                    <div className="mt-4 rounded-md bg-green-100 p-3 text-sm text-green-700">
+                    <Alert severity="success" sx={{ mt: 2 }}>
                         Link created successfully!
-                    </div>
+                    </Alert>
                 )}
             </CardContent>
         </Card>
