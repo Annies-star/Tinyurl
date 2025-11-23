@@ -9,7 +9,7 @@ export function Footer() {
             <Container maxWidth="lg">
                 <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, alignItems: 'center', justifyContent: 'space-between', gap: 2 }}>
                     <Typography variant="body2" color="text.secondary" align="center">
-                        &copy; {new Date().getFullYear()} TinyLink. Built for the Take-Home Assignment.
+                        &copy; {new Date().getFullYear()} TinyLink. Developed by Sam Joshua.
                     </Typography>
                     <Box sx={{ display: 'flex', gap: 2 }}>
                         <Link href="#" color="text.secondary" underline="hover" variant="body2">
