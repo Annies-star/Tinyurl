@@ -33,10 +33,10 @@ export function Header() {
                     </Link>
 
                     <Box sx={{ display: 'flex', gap: 2 }}>
-                        <Button component={Link} href="/" color="inherit" sx={{ textTransform: 'none' }}>
-                            Dashboard
+                        <Button component={Link} href="https://sam-joshua.vercel.app" color="inherit" sx={{ textTransform: 'none' }}>
+                            Portfolio
                         </Button>
-                        <Button component={Link} href="https://github.com" target="_blank" rel="noopener noreferrer" color="inherit" sx={{ textTransform: 'none' }}>
+                        <Button component={Link} href="https://github.com/samjoshua2002" target="_blank" rel="noopener noreferrer" color="inherit" sx={{ textTransform: 'none' }}>
                             GitHub
                         </Button>
                     </Box>
