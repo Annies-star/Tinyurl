@@ -15,7 +15,7 @@ const theme = createTheme({
             paper: '#121212',
         },
         primary: {
-            main: '#FACC15', // Rich Yellow
+            main: '#FFFFFF', // White
             contrastText: '#000000',
         },
         text: {
@@ -46,7 +46,7 @@ const theme = createTheme({
                 },
                 containedPrimary: {
                     '&:hover': {
-                        backgroundColor: '#EAB308', // Yellow-500
+                        backgroundColor: '#E5E5E5', // Light gray
                     },
                 },
             },
